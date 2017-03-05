@@ -1,6 +1,6 @@
 import numpy as np
 import re
-from cnf import cnf_formula
+import cnf
 
 
 def parse(dimacs_data: str):
@@ -21,7 +21,7 @@ def parse(dimacs_data: str):
             clause_count = int(preamble[3])
             lines_with_clauses = lines[line_offset + 1:]
             logical_matrix = __parse_clauses(lines_with_clauses, clause_count)
-            return cnf_formula.CnfFormula(logical_matrix, variable_count)
+            return cnf.CnfFormula(logical_matrix, variable_count)
 
 
 def __parse_clauses(lines_with_clauses: list, clause_count: int):
