@@ -1,4 +1,5 @@
 import dimacs_parser
+import genetic_solver
 
 
 class Runner:
@@ -11,5 +12,8 @@ class Runner:
             self._formulas.append(formula)
 
     def run(self):
-        return
+
+        for formula in self._formulas:
+            solver = genetic_solver.GeneticSolver(formula)
+            solver.solve()
 

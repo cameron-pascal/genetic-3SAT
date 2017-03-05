@@ -20,13 +20,12 @@ class CnfEvaluator:
                 it.iternext()
 
             term_idx = it.multi_index[1]
-            variable = self._formula.logical_matrix[clause_idx, term_idx]
 
-            is_negated = variable < 0
+            variable = self._formula.logical_matrix[clause_idx, term_idx]
 
             truth_value = variable_instances[variable - 1]
 
-            if is_negated:
+            if variable < 0:
                 truth_value = not truth_value
 
             if truth_value:

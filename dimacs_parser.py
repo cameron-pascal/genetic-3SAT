@@ -21,13 +21,13 @@ def parse(dimacs_data: str):
             clause_count = int(preamble[3])
             lines_with_clauses = lines[line_offset + 1:]
             logical_matrix = __parse_clauses(lines_with_clauses, clause_count)
-            return cnf.CnfFormula(logical_matrix, variable_count)
+            return cnf.CnfFormula(logical_matrix, variable_count, clause_count)
 
 
 def __parse_clauses(lines_with_clauses: list, clause_count: int):
 
     # We are representing a 3CNF formula as a matrix where each vector is a clause
-    logical_formula_matrix = np.zeros((clause_count, 3), np.int8)
+    logical_formula_matrix = np.zeros((clause_count, 3), np.int16)
 
     joined_lines = ''.join(lines_with_clauses)
     joined_lines = joined_lines.replace('0%0', '')
@@ -41,7 +41,5 @@ def __parse_clauses(lines_with_clauses: list, clause_count: int):
             numeric_representation = int(variable)
             logical_formula_matrix[clause_index, term_index] = numeric_representation
 
-    print(logical_formula_matrix)
-    print('\n')
     return logical_formula_matrix
 
