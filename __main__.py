@@ -1,5 +1,6 @@
 import os
 import sys
+import problem_runner
 
 
 def main(argv):
@@ -13,10 +14,14 @@ def main(argv):
         print("Specified directory does not exist")
         return 0
 
-    problems = loadproblemset(path)
+    problems = load_problem_set(path)
+
+    runner = problem_runner.Runner(problems)
+
+    runner.run()
 
 
-def loadproblemset(path):
+def load_problem_set(path):
     problems = []
 
     for file in os.listdir(path):
