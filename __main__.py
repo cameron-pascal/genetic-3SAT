@@ -9,7 +9,7 @@ class _Encoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
 
-TIME_LIMIT = 120
+TIME_LIMIT = 36000  # 10 hours
 
 def main(argv):
     if len(argv) != 3:
