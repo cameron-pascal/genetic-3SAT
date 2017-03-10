@@ -1,24 +1,36 @@
 import os
 import sys
 import problem_runner
+import json
+from json import JSONEncoder
 
+
+class _Encoder(JSONEncoder):
+    def default(self, o):
+        return o.__dict__
+
+TIME_LIMIT = 120
 
 def main(argv):
-    if len(argv) != 2:
+    if len(argv) != 3:
         print("Invalid usage.")
         return 0
 
-    path = argv[1]
+    in_path = argv[1]
+    out_path = argv[2]
 
-    if not(os.path.isdir(path)):
+    if not(os.path.isdir(in_path), os.path.isdir(out_path)):
         print("Specified directory does not exist")
         return 0
 
-    problems = load_problem_set(path)
+    problems = load_problem_set(in_path)
 
-    runner = problem_runner.Runner(problems)
+    runner = problem_runner.Runner(problems, out_path, TIME_LIMIT)
 
-    runner.run()
+    data = runner.run()
+
+    with open(os.path.join(out_path, "3sat_agg_data.json"), 'w') as out_file:
+        json.dump(data, out_file, indent=4, cls=_Encoder)
 
 
 def load_problem_set(path):
@@ -26,9 +38,8 @@ def load_problem_set(path):
 
     for file in os.listdir(path):
         if file.endswith('.cnf'):
-            f = open(os.path.join(path, file))
-            problems.append(f.read())
-            f.close()
+            with open(os.path.join(path, file)) as cnf_file:
+                problems.append(cnf_file.read())
 
     return problems
 

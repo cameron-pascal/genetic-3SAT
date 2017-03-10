@@ -9,31 +9,19 @@ class CnfEvaluator:
 
     def evaluate(self, variable_instances: np.array):
 
-        satisfied_clauses = np.zeros(self._formula.clause_count, np.bool)
         satisfied_count = 0
 
-        it = np.nditer(self._formula.logical_matrix, flags=['multi_index'])
-        while not it.finished:
-            clause_idx = it.multi_index[0]
+        for clause_idx in range(0, self._formula.clause_count):
+            for term_idx in range(0, 3):
 
-            if satisfied_clauses[clause_idx]:
-                it.iternext()
+                variable = self._formula.logical_matrix[clause_idx, term_idx]
+                truth_value = variable_instances[abs(variable) - 1]
 
-            term_idx = it.multi_index[1]
+                if variable < 0:
+                    truth_value = not truth_value
 
-            variable = self._formula.logical_matrix[clause_idx, term_idx]
-
-            truth_value = variable_instances[variable - 1]
-
-            if variable < 0:
-                truth_value = not truth_value
-
-            if truth_value:
-                satisfied_count += 1
-                satisfied_clauses[clause_idx] = True
-
-            it.iternext()
+                if truth_value:
+                    satisfied_count += 1
+                    break
 
         return satisfied_count
-
-
